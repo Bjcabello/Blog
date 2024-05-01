@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title%}
+        <!--titulo de cada pagina-->
+        {% endblock%}
+        | Bryan Cabello
+    </title>
+</head>
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+<body>
+    <!--cabecera de la pagina-->
+    <header>
+        <div id="logotipo">
+            <!--logotipo django-->
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+            <h1>Proyecto con Django</h1>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li>
+                <a href="{% url 'inicio' %}">Inicio</a>
+            </li>
+            {% if user.email %}
+                <li>
+                    <a href="{% url 'list_articles' %}">Categorías</a>
+                    <ul>
+                        {% for category in categories %}
+                            <li>
+                                <a href="{% url 'category' category.0 %}">{{ category.1 }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% for page in pages %}
+                    <li>
+                        <a href="{% url 'page' page.2 %}">{{ page.1 }}</a>
+                    </li>
+                {% endfor %}
+
+                <li>
+                    <a href="{% url 'logout' %}">Cerrar Sesión</a>
+                </li>  
+
+            {% else %}
+                <li>
+                    <a href="{% url 'register' %}">Registro</a>
+                </li>      
+                <li>
+                    <a href="{% url 'login' %}">Login</a>
+                </li>
+            {% endif %}          
+        </ul>
+    </nav>
+       
+    <div class="barra">
+        <span class="esquina-izquierda"></span>
+        <span class="relleno-barra"></span>
+        <span class="esquina-derecha"></span>
+    </div>
+    <div id="content">
+        <div class="box">
+            {% block content %} 
+            <!--Codigo que viene de templates-->
+            <strong>Contenido del bloque original!!!</strong>
+            {% endblock %} 
+
+        </div> 
+    </div>
+    <hr>
+    <footer>
+        Master en python &copy Bryan Cabello Web - {% now "d/m/Y" %}
+    </footer>
+
+
+
+</body>
+</html>
